@@ -1,0 +1,58 @@
+<!DOCTYPE html>
+<html lang="zh-TW">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>功能選單示例</title>
+    <link rel="stylesheet" href="style.css">
+</head>
+<body>
+    <!-- 主選單 -->
+    <div id="main-menu" class="screen active">
+        <h1>主選單</h1>
+        <div class="menu-buttons">
+            <button class="menu-btn" onclick="showScreen('feature-a')">A 功能</button>
+            <button class="menu-btn" onclick="showScreen('feature-b')">B 功能</button>
+            <button class="menu-btn" onclick="showScreen('feature-c')">C 功能</button>
+        </div>
+    </div>
+
+    <!-- A 功能畫面 -->
+    <div id="feature-a" class="screen">
+        <div class="screen-header">
+            <button class="back-btn" onclick="showScreen('main-menu')">返回主選單</button>
+            <h2>A 功能</h2>
+        </div>
+        <div class="content">
+            <h3>這是 A 功能的內容</h3>
+            <p>這裡可以放置 A 功能的相關內容</p>
+        </div>
+    </div>
+
+    <!-- B 功能畫面 -->
+    <div id="feature-b" class="screen">
+        <div class="screen-header">
+            <button class="back-btn" onclick="showScreen('main-menu')">返回主選單</button>
+            <h2>B 功能</h2>
+        </div>
+        <div class="content">
+            <h3>這是 B 功能的內容</h3>
+            <p>這裡可以放置 B 功能的相關內容</p>
+        </div>
+    </div>
+
+    <!-- C 功能畫面 -->
+    <div id="feature-c" class="screen">
+        <div class="screen-header">
+            <button class="back-btn" onclick="showScreen('main-menu')">返回主選單</button>
+            <h2>C 功能</h2>
+        </div>
+        <div class="content">
+            <h3>這是 C 功能的內容</h3>
+            <p>這裡可以放置 C 功能的相關內容</p>
+        </div>
+    </div>
+
+    <script src="script.js"></script>
+</body>
+</html>

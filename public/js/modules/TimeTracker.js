@@ -7,12 +7,24 @@ export class TimeTracker {
         this.timer = null;
         this.currentSession = null;
         this.lastSaveDate = new Date().toISOString().split('T')[0];
+        this.lastUpdate = Date.now();
         
         // 每分鐘同步一次數據
         setInterval(() => this.syncProgress(), 60000);
         
         // 午夜重置計時器
         this.setupMidnightReset();
+
+        // 確保計時器在頁面隱藏時也能正常運作
+        if (typeof document !== 'undefined') {
+            document.addEventListener('visibilitychange', () => {
+                if (document.hidden && this.isActive) {
+                    this.handleBackgroundTime();
+                } else {
+                    this.lastUpdate = Date.now();
+                }
+            });
+        }
     }
 
     async init() {
@@ -40,10 +52,17 @@ export class TimeTracker {
     startTimer() {
         if (!this.isActive) {
             this.isActive = true;
+            this.lastUpdate = Date.now();
             this.timer = setInterval(() => {
-                this.currentTime += 1;
-                this.todayStudyTime += 1;
-                this.syncProgress();
+                const now = Date.now();
+                const elapsed = Math.floor((now - this.lastUpdate) / 1000);
+                
+                if (elapsed > 0) {
+                    this.currentTime += elapsed;
+                    this.todayStudyTime += elapsed;
+                    this.lastUpdate = now;
+                    this.syncProgress();
+                }
             }, 1000);
         }
     }
@@ -51,9 +70,25 @@ export class TimeTracker {
     pauseTimer() {
         if (this.isActive) {
             this.isActive = false;
-            clearInterval(this.timer);
-            this.timer = null;
+            if (this.timer) {
+                clearInterval(this.timer);
+                this.timer = null;
+            }
+            this.handleBackgroundTime();
             this.syncProgress();
+        }
+    }
+
+    handleBackgroundTime() {
+        if (this.isActive) {
+            const now = Date.now();
+            const elapsed = Math.floor((now - this.lastUpdate) / 1000);
+            
+            if (elapsed > 0) {
+                this.currentTime += elapsed;
+                this.todayStudyTime += elapsed;
+                this.lastUpdate = now;
+            }
         }
     }
 

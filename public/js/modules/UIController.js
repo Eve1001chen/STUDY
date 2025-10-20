@@ -5,6 +5,9 @@ export class UIController {
         this.motivationSystem = motivationSystem;
         this.dataSync = dataSync;
         
+        // 計時器更新間隔
+        this.timerInterval = null;
+        
         // UI元素快取
         this.elements = {
             timer: {
@@ -66,12 +69,23 @@ export class UIController {
         this.elements.timer.startBtn.disabled = true;
         this.elements.timer.pauseBtn.disabled = false;
         this.elements.timer.stopBtn.disabled = false;
+
+        // 開始定期更新顯示
+        this.timerInterval = setInterval(() => {
+            this.updateTimerDisplay(this.timeTracker.getCurrentStudyTime());
+        }, 1000);
     }
 
     pauseTimer() {
         this.timeTracker.pauseTimer();
         this.elements.timer.startBtn.disabled = false;
         this.elements.timer.pauseBtn.disabled = true;
+
+        // 停止更新顯示
+        if (this.timerInterval) {
+            clearInterval(this.timerInterval);
+            this.timerInterval = null;
+        }
     }
 
     stopTimer() {
@@ -81,21 +95,56 @@ export class UIController {
         this.elements.timer.pauseBtn.disabled = true;
         this.elements.timer.stopBtn.disabled = true;
         
+        // 停止更新顯示
+        if (this.timerInterval) {
+            clearInterval(this.timerInterval);
+            this.timerInterval = null;
+        }
+
         // 重置計時器顯示
         this.updateTimerDisplay(0);
         
-        // 開啟記錄表單
-        this.showRecordForm(duration);
+        if (duration > 0) {
+            // 開啟記錄表單並預填時間
+            this.openStudyRecordForm(duration);
+        }
+    }
+
+    openStudyRecordForm(duration) {
+        // 計算時間
+        const hours = Math.floor(duration / 3600);
+        const minutes = Math.floor((duration % 3600) / 60);
+        
+        // 顯示表單
+        this.elements.form.style.display = 'block';
+        
+        // 添加學習時間提示
+        const timeInfo = document.createElement('div');
+        timeInfo.className = 'time-info';
+        timeInfo.innerHTML = `學習時間：${hours}小時${minutes}分鐘`;
+        this.elements.form.insertBefore(timeInfo, this.elements.form.firstChild);
     }
 
     updateTimerDisplay(seconds) {
+        if (typeof seconds !== 'number' || isNaN(seconds)) {
+            console.error('Invalid seconds value:', seconds);
+            seconds = 0;
+        }
+
         const h = Math.floor(seconds / 3600);
         const m = Math.floor((seconds % 3600) / 60);
         const s = seconds % 60;
         
-        this.elements.timer.hours.textContent = h.toString().padStart(2, '0');
-        this.elements.timer.minutes.textContent = m.toString().padStart(2, '0');
-        this.elements.timer.seconds.textContent = s.toString().padStart(2, '0');
+        if (this.elements.timer.hours && 
+            this.elements.timer.minutes && 
+            this.elements.timer.seconds) {
+            
+            this.elements.timer.hours.textContent = h.toString().padStart(2, '0');
+            this.elements.timer.minutes.textContent = m.toString().padStart(2, '0');
+            this.elements.timer.seconds.textContent = s.toString().padStart(2, '0');
+        } else {
+            console.error('Timer elements not found');
+        }
     }
 
     async handleFormSubmit(e) {

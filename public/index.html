@@ -3,16 +3,73 @@
 <head>
     <meta charset="UTF-8">
     <meta name="viewport" content="width=device-width, initial-scale=1.0">
-    <title>高三學習時間管理與激勵系統</title>
-    <link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/font-awesome/5.15.4/css/all.min.css">
-    <link rel="stylesheet" href="css/styles.css">
+    <title>高三學習追蹤系統</title>
+    <link rel="stylesheet" href="css/main.css">
+    <link rel="stylesheet" href="css/ypt-style.css">
+    <link rel="stylesheet" href="css/animations.css">
+    <link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/font-awesome/6.0.0/css/all.min.css">
+    <script src="https://cdn.jsdelivr.net/npm/gun/gun.js"></script>
+    <script src="https://cdn.jsdelivr.net/npm/chart.js"></script>
 </head>
 <body>
-    <header class="main-header">
-        <div class="container">
-            <h1>學習時間管理與激勵系統</h1>
-            <div id="sync-status" class="status-offline">
-                <i class="fas fa-sync-alt"></i> 同步狀態: 離線 | 節點數: 0
+    <div class="app-container">
+        <!-- 主選單 -->
+        <div id="main-menu" class="screen active">
+            <h1 class="app-title">高三學習追蹤系統</h1>
+            <div class="menu-grid">
+                <div class="menu-item" data-screen="timer-screen">
+                    <div class="menu-icon">
+                        <i class="fas fa-clock"></i>
+                    </div>
+                    <h2>學習計時器</h2>
+                    <p>智能追蹤每個科目的學習時間，幫助你更有效地分配時間</p>
+                    <span class="feature-tag">即時追蹤</span>
+                </div>
+                
+                <div class="menu-item" data-screen="calendar-screen">
+                    <div class="menu-icon">
+                        <i class="fas fa-calendar-alt"></i>
+                    </div>
+                    <h2>學習行事曆</h2>
+                    <p>視覺化你的學習歷程，記錄每日進度和重要時程</p>
+                    <span class="feature-tag">數據分析</span>
+                </div>
+                
+                <div class="menu-item" data-screen="progress-screen">
+                    <div class="menu-icon">
+                        <i class="fas fa-tasks"></i>
+                    </div>
+                    <h2>學習進度管理</h2>
+                    <p>整合筆記、檔案和學習資源，一站式管理你的學習歷程</p>
+                    <span class="feature-tag">雲端同步</span>
+                </div>
+                
+                <div class="menu-item" data-screen="stats-screen">
+                    <div class="menu-icon">
+                        <i class="fas fa-chart-line"></i>
+                    </div>
+                    <h2>學習統計</h2>
+                    <p>透過視覺化圖表分析你的學習效率和進展趨勢</p>
+                    <span class="feature-tag">智能分析</span>
+                </div>
+                
+                <div class="menu-item" data-screen="subject-screen">
+                    <div class="menu-icon">
+                        <i class="fas fa-books"></i>
+                    </div>
+                    <h2>科目管理</h2>
+                    <p>自訂學習科目和目標，追蹤每科的學習成效</p>
+                    <span class="feature-tag">客製化</span>
+                </div>
+                
+                <div class="menu-item" data-screen="settings-screen">
+                    <div class="menu-icon">
+                        <i class="fas fa-cog"></i>
+                    </div>
+                    <h2>系統設定</h2>
+                    <p>個人化你的學習環境和偏好設定</p>
+                    <span class="feature-tag">個人化</span>
+                </div>
             </div>
         </div>
     </header>
@@ -30,24 +87,160 @@
                 </div>
             </section>
 
-            <!-- 計時器區域 -->
-            <section class="timer-section">
-                <div class="timer">
-                    <h2>學習計時器</h2>
-                    <div class="timer-display">
-                        <span id="hours">00</span>:<span id="minutes">00</span>:<span id="seconds">00</span>
+            <!-- YPT 風格計時器區域 -->
+            <section class="ypt-timer">
+                <div class="timer-container">
+                    <div class="current-subject">
+                        <select id="subject-selector" class="subject-select">
+                            <option value="">選擇科目</option>
+                            <option value="國文">國文</option>
+                            <option value="英文">英文</option>
+                            <option value="數學">數學</option>
+                            <option value="物理">物理</option>
+                            <option value="化學">化學</option>
+                            <option value="生物">生物</option>
+                            <option value="地科">地球科學</option>
+                            <option value="地理">地理</option>
+                            <option value="歷史">歷史</option>
+                            <option value="公民">公民與社會</option>
+                        </select>
                     </div>
-                    <div class="timer-controls">
-                        <button id="start-timer" class="btn btn-primary">
-                            <i class="fas fa-play"></i> 開始
-                        </button>
-                        <button id="pause-timer" class="btn btn-secondary" disabled>
-                            <i class="fas fa-pause"></i> 暫停
-                        </button>
-                        <button id="stop-timer" class="btn btn-danger" disabled>
-                            <i class="fas fa-stop"></i> 結束
-                        </button>
+                    
+                    <div class="main-timer">
+                        <div class="timer-circle">
+                            <div class="timer-display">
+                                <span id="hours">00</span>
+                                <span class="colon">:</span>
+                                <span id="minutes">00</span>
+                                <span class="colon">:</span>
+                                <span id="seconds">00</span>
+                            </div>
+                            <div class="timer-subject" id="current-subject-display">
+                                準備開始學習
+                            </div>
+                        </div>
+                        
+                        <div class="timer-controls">
+                            <button id="start-timer" class="control-btn start">
+                                <i class="fas fa-play"></i>
+                            </button>
+                            <button id="pause-timer" class="control-btn pause" disabled>
+                                <i class="fas fa-pause"></i>
+                            </button>
+                            <button id="stop-timer" class="control-btn stop" disabled>
+                                <i class="fas fa-stop"></i>
+                            </button>
+                        </div>
                     </div>
+
+                    <div class="study-stats">
+                        <div class="today-total">
+                            <h3>今日總時數</h3>
+                            <div class="total-time" id="today-total-time">00:00:00</div>
+                        </div>
+                        <div class="subject-breakdown" id="subject-breakdown">
+                            <!-- 動態生成科目時間統計 -->
+                        </div>
+                    </div>
+                </div>
+            </section>
+
+            <!-- 學習行事曆區域 -->
+            <section class="study-calendar">
+                <h2><i class="fas fa-calendar-alt"></i> 學習行事曆</h2>
+                <div class="calendar-container">
+                    <div class="calendar-header">
+                        <button id="prev-month" class="calendar-nav"><i class="fas fa-chevron-left"></i></button>
+                        <h3 id="current-month">2025年 10月</h3>
+                        <button id="next-month" class="calendar-nav"><i class="fas fa-chevron-right"></i></button>
+                    </div>
+                    <div class="calendar-body">
+                        <div class="weekdays">
+                            <div>日</div>
+                            <div>一</div>
+                            <div>二</div>
+                            <div>三</div>
+                            <div>四</div>
+                            <div>五</div>
+                            <div>六</div>
+                        </div>
+                        <div id="calendar-days" class="days">
+                            <!-- 動態生成日期格 -->
+                        </div>
+                    </div>
+                </div>
+
+                <div class="daily-record" id="daily-record">
+                    <h3>每日學習記錄</h3>
+                    <div class="record-date" id="record-date">2025年10月20日</div>
+                    <div class="subject-records" id="daily-subject-records">
+                        <!-- 動態生成每日科目學習記錄 -->
+                    </div>
+                    <div class="daily-notes">
+                        <textarea id="daily-note" placeholder="今日學習筆記..."></textarea>
+                        <button id="save-note" class="btn btn-primary">儲存筆記</button>
+                    </div>
+                </div>
+            </section>
+
+            <!-- 學習進度上傳區域 -->
+            <section class="progress-upload">
+                <h2><i class="fas fa-cloud-upload-alt"></i> 學習進度管理</h2>
+                <div class="progress-tabs">
+                    <button class="tab-btn active" data-tab="notes">筆記管理</button>
+                    <button class="tab-btn" data-tab="files">檔案管理</button>
+                    <button class="tab-btn" data-tab="links">資源連結</button>
+                </div>
+
+                <!-- 筆記管理 -->
+                <div class="tab-content active" id="notes-content">
+                    <div class="note-list" id="saved-notes">
+                        <!-- 動態載入筆記列表 -->
+                    </div>
+                    <button class="btn btn-primary" id="add-note">
+                        <i class="fas fa-plus"></i> 新增筆記
+                    </button>
+                </div>
+
+                <!-- 檔案管理 -->
+                <div class="tab-content" id="files-content">
+                    <div class="file-upload-area">
+                        <form id="file-upload-form">
+                            <div class="upload-zone" id="drop-zone">
+                                <i class="fas fa-cloud-upload-alt"></i>
+                                <p>拖曳檔案至此或點擊上傳</p>
+                                <input type="file" id="file-input" multiple hidden>
+                            </div>
+                            <div class="subject-select">
+                                <label for="file-subject">選擇科目：</label>
+                                <select id="file-subject" required>
+                                    <option value="國文">國文</option>
+                                    <option value="英文">英文</option>
+                                    <option value="數學">數學</option>
+                                    <option value="物理">物理</option>
+                                    <option value="化學">化學</option>
+                                    <option value="生物">生物</option>
+                                    <option value="地科">地球科學</option>
+                                    <option value="地理">地理</option>
+                                    <option value="歷史">歷史</option>
+                                    <option value="公民">公民與社會</option>
+                                </select>
+                            </div>
+                        </form>
+                    </div>
+                    <div class="file-list" id="uploaded-files">
+                        <!-- 動態載入檔案列表 -->
+                    </div>
+                </div>
+
+                <!-- 資源連結 -->
+                <div class="tab-content" id="links-content">
+                    <div class="resource-list" id="saved-links">
+                        <!-- 動態載入資源連結 -->
+                    </div>
+                    <button class="btn btn-primary" id="add-link">
+                        <i class="fas fa-plus"></i> 新增資源連結
+                    </button>
                 </div>
             </section>
 
@@ -71,10 +264,16 @@
                     <div class="form-group">
                         <label for="subject">科目</label>
                         <select id="subject" required>
+                            <option value="國文">國文</option>
+                            <option value="英文">英文</option>
                             <option value="數學">數學</option>
                             <option value="物理">物理</option>
                             <option value="化學">化學</option>
                             <option value="生物">生物</option>
+                            <option value="地科">地球科學</option>
+                            <option value="地理">地理</option>
+                            <option value="歷史">歷史</option>
+                            <option value="公民">公民與社會</option>
                         </select>
                     </div>
                     
