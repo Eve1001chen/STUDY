@@ -8,7 +8,88 @@
 </head>
 <body>
     <div id="app">
-        <!-- 應用程式內容將動態插入這裡 -->
+        <div id="sync-status" class="status-offline">同步狀態: 離線 | 節點數: 0</div>
+        
+        <!-- 等級和積分顯示 -->
+        <div class="level-display">
+            <div class="current-level">
+                <h3 id="level-title">學習新手</h3>
+                <div class="level-progress">
+                    <div class="progress-bar" id="level-progress"></div>
+                </div>
+                <p class="points">積分: <span id="total-points">0</span></p>
+            </div>
+        </div>
+
+        <!-- 週目標挑戰 -->
+        <div class="weekly-challenge">
+            <h3>本週挑戰</h3>
+            <div id="current-challenge">
+                <!-- 動態插入當前挑戰 -->
+            </div>
+            <div class="challenge-progress">
+                <div class="progress-bar" id="challenge-progress"></div>
+            </div>
+        </div>
+        
+        <!-- 學習進度記錄表單 -->
+        <div class="progress-form">
+            <h2>記錄學習進度</h2>
+            <form id="study-progress-form">
+                <div class="form-group">
+                    <label for="subject">科目</label>
+                    <select id="subject" required>
+                        <option value="數學">數學</option>
+                        <option value="物理">物理</option>
+                        <option value="化學">化學</option>
+                        <option value="生物">生物</option>
+                    </select>
+                </div>
+                
+                <div class="form-group">
+                    <label for="topic">主題</label>
+                    <input type="text" id="topic" required>
+                </div>
+                
+                <div class="form-group">
+                    <label for="difficulty">難度 (1-5)</label>
+                    <input type="range" id="difficulty" min="1" max="5" value="3">
+                    <div class="range-value" id="difficulty-value">3</div>
+                </div>
+                
+                <div class="form-group">
+                    <label for="comprehension">理解度 (1-5)</label>
+                    <input type="range" id="comprehension" min="1" max="5" value="3">
+                    <div class="range-value" id="comprehension-value">3</div>
+                </div>
+                
+                <div class="form-group">
+                    <label for="notes">筆記</label>
+                    <textarea id="notes"></textarea>
+                </div>
+                
+                <button type="submit" class="btn btn-primary">記錄進度</button>
+            </form>
+        </div>
+
+        <!-- 學習統計和成就 -->
+        <div class="achievement-section">
+            <h2>成就與里程碑</h2>
+            <div class="achievements-grid" id="achievements">
+                <!-- 動態插入成就 -->
+            </div>
+        </div>
+
+        <!-- 學習統計 -->
+        <div class="progress-stats">
+            <h2>學習統計</h2>
+            <div id="daily-summary"></div>
+            <div id="study-trends"></div>
+            <div id="study-streak">
+                <h3>連續學習天數: <span id="streak-count">0</span>天</h3>
+                <div class="streak-bonus">額外獎勵: <span id="streak-bonus">0</span>%</div>
+            </div>
+        </div>
     </div>
 
     <!-- GUN.js -->

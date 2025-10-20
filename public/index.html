@@ -1,0 +1,154 @@
+<!DOCTYPE html>
+<html lang="zh-TW">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>高三學習時間管理與激勵系統</title>
+    <link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/font-awesome/5.15.4/css/all.min.css">
+    <link rel="stylesheet" href="css/styles.css">
+</head>
+<body>
+    <header class="main-header">
+        <div class="container">
+            <h1>學習時間管理與激勵系統</h1>
+            <div id="sync-status" class="status-offline">
+                <i class="fas fa-sync-alt"></i> 同步狀態: 離線 | 節點數: 0
+            </div>
+        </div>
+    </header>
+
+    <main class="container">
+        <div class="dashboard">
+            <!-- 等級和積分顯示 -->
+            <section class="level-display">
+                <div class="current-level">
+                    <h3 id="level-title">學習新手</h3>
+                    <div class="level-progress">
+                        <div class="progress-bar" id="level-progress"></div>
+                    </div>
+                    <p class="points">積分: <span id="total-points">0</span></p>
+                </div>
+            </section>
+
+            <!-- 計時器區域 -->
+            <section class="timer-section">
+                <div class="timer">
+                    <h2>學習計時器</h2>
+                    <div class="timer-display">
+                        <span id="hours">00</span>:<span id="minutes">00</span>:<span id="seconds">00</span>
+                    </div>
+                    <div class="timer-controls">
+                        <button id="start-timer" class="btn btn-primary">
+                            <i class="fas fa-play"></i> 開始
+                        </button>
+                        <button id="pause-timer" class="btn btn-secondary" disabled>
+                            <i class="fas fa-pause"></i> 暫停
+                        </button>
+                        <button id="stop-timer" class="btn btn-danger" disabled>
+                            <i class="fas fa-stop"></i> 結束
+                        </button>
+                    </div>
+                </div>
+            </section>
+
+            <!-- 本週挑戰 -->
+            <section class="weekly-challenge">
+                <h2><i class="fas fa-trophy"></i> 本週挑戰</h2>
+                <div id="current-challenge">
+                    <!-- 動態插入當前挑戰 -->
+                </div>
+                <div class="challenge-progress">
+                    <div class="progress-bar" id="challenge-progress"></div>
+                </div>
+            </section>
+        </div>
+
+        <div class="content-grid">
+            <!-- 左側：學習記錄表單 -->
+            <section class="progress-form">
+                <h2><i class="fas fa-edit"></i> 記錄學習進度</h2>
+                <form id="study-progress-form">
+                    <div class="form-group">
+                        <label for="subject">科目</label>
+                        <select id="subject" required>
+                            <option value="數學">數學</option>
+                            <option value="物理">物理</option>
+                            <option value="化學">化學</option>
+                            <option value="生物">生物</option>
+                        </select>
+                    </div>
+                    
+                    <div class="form-group">
+                        <label for="topic">主題</label>
+                        <input type="text" id="topic" required>
+                    </div>
+                    
+                    <div class="form-group">
+                        <label for="difficulty">難度 (1-5)</label>
+                        <div class="range-container">
+                            <input type="range" id="difficulty" min="1" max="5" value="3">
+                            <div class="range-value" id="difficulty-value">3</div>
+                        </div>
+                    </div>
+                    
+                    <div class="form-group">
+                        <label for="comprehension">理解度 (1-5)</label>
+                        <div class="range-container">
+                            <input type="range" id="comprehension" min="1" max="5" value="3">
+                            <div class="range-value" id="comprehension-value">3</div>
+                        </div>
+                    </div>
+                    
+                    <div class="form-group">
+                        <label for="notes">筆記</label>
+                        <textarea id="notes"></textarea>
+                    </div>
+                    
+                    <button type="submit" class="btn btn-primary">
+                        <i class="fas fa-save"></i> 記錄進度
+                    </button>
+                </form>
+            </section>
+
+            <!-- 右側：統計和成就 -->
+            <div class="stats-achievements">
+                <section class="achievement-section">
+                    <h2><i class="fas fa-medal"></i> 成就與里程碑</h2>
+                    <div class="achievements-grid" id="achievements">
+                        <!-- 動態插入成就 -->
+                    </div>
+                </section>
+
+                <section class="progress-stats">
+                    <h2><i class="fas fa-chart-line"></i> 學習統計</h2>
+                    <div id="daily-summary" class="stats-card"></div>
+                    <div id="study-trends" class="stats-card"></div>
+                    <div id="study-streak" class="stats-card">
+                        <h3>
+                            <i class="fas fa-fire"></i> 
+                            連續學習天數: <span id="streak-count">0</span>天
+                        </h3>
+                        <div class="streak-bonus">
+                            額外獎勵: <span id="streak-bonus">0</span>%
+                        </div>
+                    </div>
+                </section>
+            </div>
+        </div>
+    </main>
+
+    <footer class="main-footer">
+        <div class="container">
+            <p>&copy; 2025 學習時間管理與激勵系統</p>
+        </div>
+    </footer>
+
+    <!-- GUN.js -->
+    <script src="https://cdn.jsdelivr.net/npm/gun/gun.js"></script>
+    <!-- Chart.js for visualizations -->
+    <script src="https://cdn.jsdelivr.net/npm/chart.js"></script>
+    
+    <!-- 核心應用程式檔案 -->
+    <script type="module" src="js/app.js"></script>
+</body>
+</html>
